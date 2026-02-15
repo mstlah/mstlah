@@ -15,6 +15,9 @@ const config = {
 		}),
 		paths: {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+		},
+		alias: {
+			$repo: process.argv.includes('dev') ? './src/lib/repos/local' : './src/lib/repos/github'
 		}
 	},
 };
