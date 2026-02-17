@@ -5,7 +5,7 @@
  * Usage: deno run --allow-net --allow-read serve.ts
  */
 
-import { serveDir } from "jsr:@std/http/file-server";
+import { serveDir } from "@std/http/file-server";
 
 const PORT = 8000;
 

@@ -10,7 +10,6 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler",
     "lib": [ "deno.ns", "dom", "esnext" ]
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias

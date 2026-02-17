@@ -3,7 +3,7 @@
  * Parses markdown files into structured term objects.
  */
 
-import type { Term } from "./types";
+import type { Term } from "./types.ts";
 
 type ParsedTerm = Term;
 type ArabicWord = ParsedTerm["arabicWords"][number];

@@ -8,7 +8,7 @@ import {
   validateTermStructure, 
   containsArabic 
 } from '../../scripts/validate-terms.ts';
-import { assertEquals, assertExists } from "jsr:@std/assert";
+import { assertEquals, assertExists } from "@std/assert";
 
 interface ArabicWord {
   word: string;

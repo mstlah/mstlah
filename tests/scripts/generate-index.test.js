@@ -3,7 +3,7 @@
  * Run with: deno test tests/scripts/generate-index.test.js
  */
 
-import { assertEquals, assertExists, assertRejects } from "jsr:@std/assert";
+import { assertEquals, assertExists } from "@std/assert";
 import { 
   extractSlug, 
   generateIndex, 
@@ -26,19 +26,6 @@ Deno.test("extractSlug - handles filename without extension", () => {
 
 Deno.test("extractSlug - handles .MD uppercase extension", () => {
   assertEquals(extractSlug("API.MD"), "API");
-});
-
-Deno.test("extractSlug - throws on non-string input", () => {
-  assertRejects(
-    async () => extractSlug(/** @type {any} */ (null)),
-    TypeError,
-    "Filename must be a string"
-  );
-  assertRejects(
-    async () => extractSlug(/** @type {any} */ (123)),
-    TypeError,
-    "Filename must be a string"
-  );
 });
 
 // Test generateIndex

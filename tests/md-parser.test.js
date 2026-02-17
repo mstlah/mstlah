@@ -8,8 +8,8 @@ import {
   isValidTerm, 
   extractSlug,
   generateAbbreviation
-} from '../src/lib/md-parser';
-import { assertEquals, assertThrows } from "jsr:@std/assert";
+} from '../src/lib/md-parser.ts';
+import { assertEquals } from "@std/assert";
 
 Deno.test("parseMarkdown - parses complete term correctly", () => {
   const content = `# Application Programming Interface (API)

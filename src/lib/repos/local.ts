@@ -1,4 +1,4 @@
-import type { CategoryIndex, RootIndex, Term } from "$lib/types";
+import type { CategoryIndex, RootIndex, Term } from "../types.ts";
 
 const BASE_URL = "/data";
 
@@ -40,6 +40,6 @@ export async function fetchTerm(
 		);
 	}
 	const content = await response.text();
-	const { parseMarkdown } = await import("$lib/md-parser");
+	const { parseMarkdown } = await import("../md-parser.ts");
 	return parseMarkdown(content);
 }
