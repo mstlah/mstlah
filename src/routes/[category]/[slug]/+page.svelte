@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { fetchTerm } from "$repo";
+	import Header from "$lib/components/Header.svelte";
 	import { type ArabicWord } from "$lib/types";
 	import type { PageProps } from "./$types";
 
@@ -18,6 +19,9 @@
 		goto("/", { replaceState: false });
 	}}
 />
+
+
+<Header size="small" pos="right" />
 
 {#snippet arabicWordCard(term: ArabicWord)}
 	<div class="arabic-word-card">

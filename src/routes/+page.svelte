@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { fetchRootIndex } from "$repo";
+	import Header from "$lib/components/Header.svelte";
 
 	let categories = $state<
 		{
@@ -64,6 +65,8 @@
 		return items;
 	});
 </script>
+
+<Header />
 
 <div class="search-wrapper">
 	<div class="search-input-box">
