@@ -16,7 +16,10 @@
  *   outputFile   - Output JSON file path (default: "./data/index.json" or "./data/categories.json")
  */
 
-import { parseMarkdown, isValidTerm, type ParsedTerm } from "../src/lib/md-parser.ts";
+import type { Term } from "../src/lib/types.ts";
+import { parseMarkdown, isValidTerm,  } from "../src/lib/md-parser.ts";
+
+type ParsedTerm = Term;
 
 /**
  * @typedef {Object} TermIndex

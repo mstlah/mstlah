@@ -5,7 +5,10 @@
  * Checks files against the expected format and reports any issues.
  */
 
-import { parseMarkdown, isValidTerm, type ParsedTerm } from '../src/lib/md-parser.ts';
+import type { ArabicWord, Term } from '../src/lib/types.ts';
+import { parseMarkdown, isValidTerm } from '../src/lib/md-parser.ts';
+
+type ParsedTerm = Term;
 
 interface ValidationError {
   file: string;
@@ -116,7 +119,7 @@ function validateTermStructure(term: ParsedTerm, content: string, filename: stri
       line: findLineNumber(lines, /^# Arabic Words$/)
     });
   } else {
-    term.arabicWords.forEach((aw, index) => {
+    term.arabicWords.forEach((aw: ArabicWord, index: number) => {
       if (!aw.word || aw.word.trim().length === 0) {
         errors.push({
           file: filename,
@@ -192,7 +195,7 @@ async function validateFile(filePath: string, filename: string): Promise<Validat
         errors: [],
         data: {
           title: term.title,
-          abbrev: term.abbrev,
+          abbrev: term.abbrev!,
           tagsCount: term.tags.length,
           arabicWordsCount: term.arabicWords.length
         }
