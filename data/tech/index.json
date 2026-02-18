@@ -1,0 +1,77 @@
+{
+  "terms": [
+    {
+      "slug": "api",
+      "title": "Application Programming Interface",
+      "abbrev": "API"
+    },
+    {
+      "slug": "blockchain",
+      "title": "Blockchain"
+    },
+    {
+      "slug": "container-orchestration",
+      "title": "Container Orchestration",
+      "abbrev": "CO"
+    },
+    {
+      "slug": "continuous-integration",
+      "title": "Continuous Integration",
+      "abbrev": "CI"
+    },
+    {
+      "slug": "database-sharding",
+      "title": "Database Sharding",
+      "abbrev": "DS"
+    },
+    {
+      "slug": "distributed-systems",
+      "title": "Distributed Systems",
+      "abbrev": "DS"
+    },
+    {
+      "slug": "encryption",
+      "title": "Encryption"
+    },
+    {
+      "slug": "event-driven-architecture",
+      "title": "Event-Driven Architecture",
+      "abbrev": "EA"
+    },
+    {
+      "slug": "http",
+      "title": "HTTP",
+      "abbrev": "HyperText Transfer Protocol"
+    },
+    {
+      "slug": "internet-of-things",
+      "title": "Internet of Things",
+      "abbrev": "IoT"
+    },
+    {
+      "slug": "load-balancing",
+      "title": "Load Balancing",
+      "abbrev": "LB"
+    },
+    {
+      "slug": "microservices",
+      "title": "Microservices"
+    },
+    {
+      "slug": "rest",
+      "title": "REST",
+      "abbrev": "Representational State Transfer"
+    },
+    {
+      "slug": "separation-of-concerns",
+      "title": "Separation of Concerns",
+      "abbrev": "SOC"
+    },
+    {
+      "slug": "serverless-computing",
+      "title": "Serverless Computing",
+      "abbrev": "SC"
+    }
+  ],
+  "generatedAt": "2026-02-21T00:02:00.424Z"
+}

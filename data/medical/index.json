@@ -1,0 +1,34 @@
+{
+  "terms": [
+    {
+      "slug": "clinical-decision-support-system",
+      "title": "Clinical Decision Support System",
+      "abbrev": "CDSS"
+    },
+    {
+      "slug": "electronic-health-record",
+      "title": "Electronic Health Record",
+      "abbrev": "EHR"
+    },
+    {
+      "slug": "health-information-exchange",
+      "title": "Health Information Exchange",
+      "abbrev": "HIE"
+    },
+    {
+      "slug": "medical-imaging",
+      "title": "Medical Imaging",
+      "abbrev": "MI"
+    },
+    {
+      "slug": "telemedicine",
+      "title": "Telemedicine"
+    },
+    {
+      "slug": "wearable-health-device",
+      "title": "Wearable Health Device",
+      "abbrev": "WHD"
+    }
+  ],
+  "generatedAt": "2026-02-21T00:02:00.425Z"
+}

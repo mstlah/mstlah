@@ -1,0 +1,303 @@
+{
+  "categories": [
+    {
+      "path": "ai",
+      "name": "الذكاء العلمي",
+      "termsCount": 6,
+      "approvers": [
+        {
+          "username": "Ahmad Ali",
+          "approveCount": 6
+        },
+        {
+          "username": "Fatima Hassan",
+          "approveCount": 6
+        },
+        {
+          "username": "Layla Mahmoud",
+          "approveCount": 6
+        },
+        {
+          "username": "Omar Ibrahim",
+          "approveCount": 3
+        },
+        {
+          "username": "Samir Khaled",
+          "approveCount": 5
+        }
+      ],
+      "terms": [
+        {
+          "slug": "artificial-intelligence",
+          "title": "Artificial Intelligence",
+          "abbrev": "AI"
+        },
+        {
+          "slug": "deep-learning",
+          "title": "Deep Learning",
+          "abbrev": "DL"
+        },
+        {
+          "slug": "large-language-model",
+          "title": "Large Language Model",
+          "abbrev": "LLM"
+        },
+        {
+          "slug": "machine-learning",
+          "title": "Machine Learning",
+          "abbrev": "ML"
+        },
+        {
+          "slug": "natural-language-processing",
+          "title": "Natural Language Processing",
+          "abbrev": "NLP"
+        },
+        {
+          "slug": "neural-network",
+          "title": "Neural Network",
+          "abbrev": "NN"
+        }
+      ]
+    },
+    {
+      "path": "medical",
+      "name": "الطب",
+      "termsCount": 6,
+      "approvers": [
+        {
+          "username": "Ahmad Ali",
+          "approveCount": 6
+        },
+        {
+          "username": "Fatima Hassan",
+          "approveCount": 6
+        },
+        {
+          "username": "Layla Mahmoud",
+          "approveCount": 6
+        },
+        {
+          "username": "Omar Ibrahim",
+          "approveCount": 3
+        },
+        {
+          "username": "Samir Khaled",
+          "approveCount": 6
+        }
+      ],
+      "terms": [
+        {
+          "slug": "clinical-decision-support-system",
+          "title": "Clinical Decision Support System",
+          "abbrev": "CDSS"
+        },
+        {
+          "slug": "electronic-health-record",
+          "title": "Electronic Health Record",
+          "abbrev": "EHR"
+        },
+        {
+          "slug": "health-information-exchange",
+          "title": "Health Information Exchange",
+          "abbrev": "HIE"
+        },
+        {
+          "slug": "medical-imaging",
+          "title": "Medical Imaging",
+          "abbrev": "MI"
+        },
+        {
+          "slug": "telemedicine",
+          "title": "Telemedicine"
+        },
+        {
+          "slug": "wearable-health-device",
+          "title": "Wearable Health Device",
+          "abbrev": "WHD"
+        }
+      ]
+    },
+    {
+      "path": "programming",
+      "name": "programming",
+      "termsCount": 6,
+      "approvers": [
+        {
+          "username": "Ahmad Ali",
+          "approveCount": 5
+        },
+        {
+          "username": "Ahmad Ali:0xwal",
+          "approveCount": 1
+        },
+        {
+          "username": "Fatima Hassan",
+          "approveCount": 4
+        },
+        {
+          "username": "Fatima Hassan:0xwal",
+          "approveCount": 1
+        },
+        {
+          "username": "Layla Mahmoud",
+          "approveCount": 5
+        },
+        {
+          "username": "Layla Mahmoud:0xwal",
+          "approveCount": 1
+        },
+        {
+          "username": "Omar Ibrahim",
+          "approveCount": 4
+        },
+        {
+          "username": "Samir Khaled",
+          "approveCount": 5
+        },
+        {
+          "username": "Samir Khaled:0xwaleed",
+          "approveCount": 1
+        }
+      ],
+      "terms": [
+        {
+          "slug": "algorithm",
+          "title": "Algorithm"
+        },
+        {
+          "slug": "compiler",
+          "title": "Compiler"
+        },
+        {
+          "slug": "data-structure",
+          "title": "Data Structure",
+          "abbrev": "DS"
+        },
+        {
+          "slug": "functional-programming",
+          "title": "Functional Programming",
+          "abbrev": "FP"
+        },
+        {
+          "slug": "object-oriented-programming",
+          "title": "Object-Oriented Programming",
+          "abbrev": "OOP"
+        },
+        {
+          "slug": "recursion",
+          "title": "Recursion"
+        }
+      ]
+    },
+    {
+      "path": "tech",
+      "name": "tech",
+      "termsCount": 15,
+      "approvers": [
+        {
+          "username": "Ahmad Ali",
+          "approveCount": 11
+        },
+        {
+          "username": "Fatima Hassan",
+          "approveCount": 10
+        },
+        {
+          "username": "Hassan Mohammad",
+          "approveCount": 5
+        },
+        {
+          "username": "Layla Mahmoud",
+          "approveCount": 9
+        },
+        {
+          "username": "Nadia Sami",
+          "approveCount": 5
+        },
+        {
+          "username": "Omar Ibrahim",
+          "approveCount": 8
+        },
+        {
+          "username": "Samir Khaled",
+          "approveCount": 9
+        }
+      ],
+      "terms": [
+        {
+          "slug": "api",
+          "title": "Application Programming Interface",
+          "abbrev": "API"
+        },
+        {
+          "slug": "blockchain",
+          "title": "Blockchain"
+        },
+        {
+          "slug": "container-orchestration",
+          "title": "Container Orchestration",
+          "abbrev": "CO"
+        },
+        {
+          "slug": "continuous-integration",
+          "title": "Continuous Integration",
+          "abbrev": "CI"
+        },
+        {
+          "slug": "database-sharding",
+          "title": "Database Sharding",
+          "abbrev": "DS"
+        },
+        {
+          "slug": "distributed-systems",
+          "title": "Distributed Systems",
+          "abbrev": "DS"
+        },
+        {
+          "slug": "encryption",
+          "title": "Encryption"
+        },
+        {
+          "slug": "event-driven-architecture",
+          "title": "Event-Driven Architecture",
+          "abbrev": "EA"
+        },
+        {
+          "slug": "http",
+          "title": "HTTP",
+          "abbrev": "HyperText Transfer Protocol"
+        },
+        {
+          "slug": "internet-of-things",
+          "title": "Internet of Things",
+          "abbrev": "IoT"
+        },
+        {
+          "slug": "load-balancing",
+          "title": "Load Balancing",
+          "abbrev": "LB"
+        },
+        {
+          "slug": "microservices",
+          "title": "Microservices"
+        },
+        {
+          "slug": "rest",
+          "title": "REST",
+          "abbrev": "Representational State Transfer"
+        },
+        {
+          "slug": "separation-of-concerns",
+          "title": "Separation of Concerns",
+          "abbrev": "SOC"
+        },
+        {
+          "slug": "serverless-computing",
+          "title": "Serverless Computing",
+          "abbrev": "SC"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2026-02-21T00:02:00.427Z"
+}
