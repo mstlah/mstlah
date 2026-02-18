@@ -1,0 +1,32 @@
+{
+  "terms": [
+    {
+      "slug": "algorithm",
+      "title": "Algorithm"
+    },
+    {
+      "slug": "compiler",
+      "title": "Compiler"
+    },
+    {
+      "slug": "data-structure",
+      "title": "Data Structure",
+      "abbrev": "DS"
+    },
+    {
+      "slug": "functional-programming",
+      "title": "Functional Programming",
+      "abbrev": "FP"
+    },
+    {
+      "slug": "object-oriented-programming",
+      "title": "Object-Oriented Programming",
+      "abbrev": "OOP"
+    },
+    {
+      "slug": "recursion",
+      "title": "Recursion"
+    }
+  ],
+  "generatedAt": "2026-02-21T00:02:00.425Z"
+}

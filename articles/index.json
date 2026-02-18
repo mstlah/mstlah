@@ -1,0 +1,35 @@
+{
+  "categories": [
+    {
+      "path": "ai",
+      "articles": [
+        {
+          "id": "1",
+          "category": "ai",
+          "title": "الذكاء الاصطناعي: مقدمة شاملة"
+        }
+      ]
+    },
+    {
+      "path": "cybersecurity",
+      "articles": [
+        {
+          "id": "1",
+          "category": "cybersecurity",
+          "title": "أساسيات أمن المعلومات"
+        }
+      ]
+    },
+    {
+      "path": "programming",
+      "articles": [
+        {
+          "id": "1",
+          "category": "programming",
+          "title": "أساسيات البرمجة"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2026-03-22T06:57:40.157Z"
+}
