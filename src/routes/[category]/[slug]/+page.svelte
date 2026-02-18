@@ -10,6 +10,14 @@
 
 	let { params }: PageProps = $props();
 
+	function extractUsername(approver: string) {
+		return approver.split(":").pop();
+	}
+
+	function extractName(approver: string) {
+		return approver.split(":").shift();
+	}
+
 	const fetchTermFuture = (async () => {
 		if (dev) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -38,8 +46,8 @@
 		<div class="approvers">
 			{#each term.approvedBy as approver}
 				<div class="approver">
-					<a href="https://github.com/{approver}">
-						{approver}
+					<a target="_blank" href="https://github.com/{extractUsername(approver)}">
+						{extractName(approver)}
 					</a>
 				</div>
 			{/each}
