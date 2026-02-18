@@ -14,7 +14,7 @@ console.log(`Press Ctrl+C to stop\n`);
 
 Deno.serve({ port: PORT }, async (request) => {
   const response = await serveDir(request, {
-    fsRoot: ".",
+    fsRoot: "./build",
     showIndex: true,
     showDotfiles: false,
   });

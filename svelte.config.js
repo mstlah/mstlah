@@ -1,5 +1,5 @@
-import adapter from "@sveltejs/adapter-static";
 import process from "node:process";
+import adapter from "@sveltejs/adapter-static";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -14,12 +14,17 @@ const config = {
 			precompress: false,
 			strict: true,
 		}),
+		prerender: {
+			entries: ["/", "/[category]/[slug]"],
+		},
 		paths: {
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+			base: process.argv.includes("dev") ? "" : process.env.BASE_PATH,
 		},
 		alias: {
-			$repo: process.argv.includes('dev') ? './src/lib/repos/local' : './src/lib/repos/github'
-		}
+			$repo: process.argv.includes("dev")
+				? "./src/lib/repos/local"
+				: "./src/lib/repos/github",
+		},
 	},
 };
 
