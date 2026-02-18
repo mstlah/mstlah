@@ -4,6 +4,7 @@
 	import Header from "$lib/components/Header.svelte";
 	import { type ArabicWord } from "$lib/types";
 	import type { PageProps } from "./$types";
+	import { resolve } from "$app/paths";
 
 	let { params }: PageProps = $props();
 
@@ -16,7 +17,7 @@
 			return;
 		}
 
-		goto("/", { replaceState: false });
+		goto(resolve("/"));
 	}}
 />
 
@@ -52,7 +53,7 @@
 	<div class="loading">Loading...</div>
 {:then term}
 	<div class="term-page">
-		<a href="/" class="term-page-back" id="backBtn">
+		<a href="{resolve('/')}" class="term-page-back" id="backBtn">
 			<svg
 				width="16"
 				height="16"

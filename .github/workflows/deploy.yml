@@ -24,6 +24,11 @@ jobs:
           BASE_PATH: '/${{ github.event.repository.name }}'
         run: deno task build
 
+      - name: Show info
+        env:
+          BASE_PATH: '/${{ github.event.repository.name }}'
+        run: echo "Base path [$BASE_PATH]"
+
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:

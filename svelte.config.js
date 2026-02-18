@@ -1,6 +1,8 @@
 import process from "node:process";
 import adapter from "@sveltejs/adapter-static";
 
+const base = process.env.BASE_PATH;
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
@@ -10,15 +12,15 @@ const config = {
 		adapter: adapter({
 			pages: "build",
 			assets: "build",
-			fallback: undefined,
+			fallback: "404.html",
 			precompress: false,
 			strict: true,
 		}),
 		prerender: {
-			entries: ["/", "/[category]/[slug]"],
+			entries: [`/`, `/[category]/[slug]`],
 		},
 		paths: {
-			base: process.argv.includes("dev") ? "" : process.env.BASE_PATH,
+			base: process.argv.includes("dev") ? "" : base,
 		},
 		alias: {
 			$repo: process.argv.includes("dev")

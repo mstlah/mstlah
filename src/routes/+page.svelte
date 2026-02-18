@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { fetchRootIndex } from "$repo";
 	import Header from "$lib/components/Header.svelte";
+	import { resolve } from "$app/paths";
 
 	let categories = $state<
 		{
@@ -15,7 +16,8 @@
 	let searchPattern = $state<string>("");
 
 	function navigateToTerm(categoryPath: string, slug: string) {
-		goto(`/${categoryPath}/${slug}`, { replaceState: false });
+		const path = resolve("/[category]/[slug]", { category: categoryPath, slug });
+		goto(path);
 	}
 
 	function handleSearch(event: KeyboardEvent) {
