@@ -5,6 +5,8 @@
 	import { type ArabicWord } from "$lib/types";
 	import type { PageProps } from "./$types";
 	import { resolve } from "$app/paths";
+	import Loading from "$lib/components/Loading.svelte";
+	import { dev } from "$app/environment";
 
 	let { params }: PageProps = $props();
 
@@ -50,7 +52,9 @@
 {/snippet}
 
 {#await s}
-	<div class="loading">Loading...</div>
+	<div class="loading">
+		<Loading />
+	</div>
 {:then term}
 	<div class="term-page">
 		<a href="{resolve('/')}" class="term-page-back" id="backBtn">
@@ -89,6 +93,13 @@
 {/await}
 
 <style>
+	.loading {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
 	.term-page {
 		display: flex;
 		flex-direction: column;
