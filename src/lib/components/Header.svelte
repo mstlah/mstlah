@@ -1,8 +1,8 @@
 <script lang="ts">
 	const { size, pos } = $props();
 	const align = pos === "right" ? "right" : "center";
-	const margin = size === "small" ? "5rem 10rem" : "5rem 15rem";
-	const fontSize = size === "small" ? "4.5rem" : "7rem";
+	const margin = size === "small" ? "5em 8em" : "5em 15em";
+	const fontSize = size === "small" ? "4.5em" : "7em";
 </script>
 
 <header class="header" style:text-align={align} style:margin-block={margin}>
@@ -14,7 +14,7 @@
 		width: clamp(600px, 70%, 80vw);
 		text-align: center;
 		margin: 0 auto;
-		margin-block: 5rem 12rem;
+		margin-block: 5em 12em;
 		text-shadow: 0 0 5px var(--color-text);
 	}
 
