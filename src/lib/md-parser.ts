@@ -8,6 +8,15 @@ import type { Term } from "./types.ts";
 type ParsedTerm = Term;
 type ArabicWord = ParsedTerm["arabicWords"][number];
 
+enum SectionState {
+	None,
+	Description,
+	Tags,
+	ArabicWords,
+	ApprovedBy,
+	Unknown,
+}
+
 export function parseMarkdown(content: string): Term {
 	if (typeof content !== "string") {
 		throw new Error("Content must be a string");
@@ -23,7 +32,7 @@ export function parseMarkdown(content: string): Term {
 		arabicWords: [],
 	};
 
-	let currentSection: string | null = null;
+	let currentSection: SectionState = SectionState.None;
 	let currentArabicWord: ArabicWord | null = null;
 	let titleFound = false;
 
@@ -31,7 +40,7 @@ export function parseMarkdown(content: string): Term {
 		const line = lines[i];
 		const trimmed = line.trim();
 
-		if (!trimmed && currentSection !== "description") {
+		if (!trimmed && currentSection !== SectionState.Description) {
 			continue;
 		}
 
@@ -42,61 +51,61 @@ export function parseMarkdown(content: string): Term {
 				result.abbrev = match[2] || "";
 				titleFound = true;
 			}
-			currentSection = null;
+			currentSection = SectionState.None;
 			continue;
 		}
 
 		if (trimmed === "## Description") {
-			currentSection = "description";
+			currentSection = SectionState.Description;
 			result.description = "";
 			continue;
 		}
 
 		if (trimmed === "## Tags") {
-			currentSection = "tags";
+			currentSection = SectionState.Tags;
 			continue;
 		}
 
 		if (trimmed === "# Arabic Words") {
-			currentSection = "arabic-words";
+			currentSection = SectionState.ArabicWords;
 			continue;
 		}
 
 		if (
 			trimmed.startsWith("## ") &&
-			(currentSection === "arabic-words" || currentSection === "approved-by")
+			(currentSection === SectionState.ArabicWords || currentSection === SectionState.ApprovedBy)
 		) {
 			currentArabicWord = {
 				word: trimmed.replace("## ", "").trim(),
 				approvedBy: [],
 			} as ArabicWord;
 			result.arabicWords.push(currentArabicWord);
-			currentSection = "arabic-words";
+			currentSection = SectionState.ArabicWords;
 			continue;
 		}
 
 		if (trimmed === "### Approved By" && currentArabicWord) {
-			currentSection = "approved-by";
+			currentSection = SectionState.ApprovedBy;
 			continue;
 		}
 
 		if (trimmed.startsWith("- ")) {
 			const item = trimmed.slice(2).trim();
 
-			if (currentSection === "tags") {
+			if (currentSection === SectionState.Tags) {
 				result.tags.push(item);
-			} else if (currentSection === "approved-by" && currentArabicWord) {
+			} else if (currentSection === SectionState.ApprovedBy && currentArabicWord) {
 				currentArabicWord.approvedBy.push(item);
 			}
 			continue;
 		}
 
-		if (currentSection === "description" && trimmed.startsWith("## ")) {
-			currentSection = "unknown";
+		if (currentSection === SectionState.Description && trimmed.startsWith("## ")) {
+			currentSection = SectionState.Unknown;
 			continue;
 		}
 
-		if (currentSection === "description") {
+		if (currentSection === SectionState.Description) {
 			if (trimmed) {
 				result.description += trimmed + "\n";
 			}
