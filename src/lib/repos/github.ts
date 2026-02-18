@@ -3,7 +3,7 @@ import type { CategoryIndex, RootIndex, Term } from "../types.ts";
 // TODO: Move to config file
 const OWNER = "mstlah";
 const REPO = "mstlah";
-const BRANCH = "main";
+const BRANCH = "dummy";
 const DATA_PATH = "data";
 
 const BASE_URL = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${DATA_PATH}`;
