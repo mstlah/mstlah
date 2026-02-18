@@ -10,7 +10,12 @@
 
 	let { params }: PageProps = $props();
 
-	const s = fetchTerm(params.category, params.slug);
+	const fetchTermFuture = (async () => {
+		if (dev) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		}
+		return fetchTerm(params.category, params.slug);
+	})();
 </script>
 
 <svelte:body
@@ -22,7 +27,6 @@
 		goto(resolve("/"));
 	}}
 />
-
 
 <Header size="small" pos="right" />
 
@@ -51,13 +55,13 @@
 	{/each}
 {/snippet}
 
-{#await s}
+{#await fetchTermFuture}
 	<div class="loading">
 		<Loading />
 	</div>
 {:then term}
 	<div class="term-page">
-		<a href="{resolve('/')}" class="term-page-back" id="backBtn">
+		<a href={resolve("/")} class="term-page-back" id="backBtn">
 			<svg
 				width="16"
 				height="16"
@@ -182,7 +186,7 @@
 
 					& .approver {
 						cursor: pointer;
-						opacity: .5;
+						opacity: 0.5;
 						padding: 0 0.5rem;
 						font-size: 0.6rem;
 						background: var(--color-approver);
@@ -191,7 +195,6 @@
 						&:hover {
 							opacity: 1;
 						}
-
 					}
 				}
 			}
