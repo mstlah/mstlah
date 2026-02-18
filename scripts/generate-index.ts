@@ -16,40 +16,21 @@
  *   outputFile   - Output JSON file path (default: "./data/index.json" or "./data/categories.json")
  */
 
-import type { Term } from "../src/lib/types.ts";
-import { parseMarkdown, isValidTerm,  } from "../src/lib/md-parser.ts";
+import type { Term, TermIndex, CategoryIndex, RootIndex } from "../src/lib/types.ts";
+import { parseMarkdown, isValidTerm } from "../src/lib/md-parser.ts";
 
-type ParsedTerm = Term;
+interface ApproverInfo {
+	username: string;
+	approveCount: number;
+}
 
-/**
- * @typedef {Object} TermIndex
- * @property {string} slug - URL-friendly identifier
- * @property {string} title - English term title
- * @property {string} [abbrev] - Abbreviation/full form (only for multi-word terms)
- */
-
-/**
- * @typedef {Object} IndexData
- * @property {TermIndex[]} terms - List of indexed terms
- * @property {string} generatedAt - ISO 8601 timestamp
- */
-
-/**
- * @typedef {Object} ApproverInfo
- * @property {string} username - The username
- * @property {number} approveCount - Number of approvals by this user
- */
-
-/**
- * @typedef {Object} CategoryMeta
- * @property {string} name
- * @property {string} [description]
- */
+interface CategoryMeta {
+	name: string;
+	description?: string;
+}
 
 /**
  * Extract slug from filename
- * @param {string} filename - The filename
- * @returns {string} The slug (filename without extension)
  */
 export function extractSlug(filename: string): string {
   if (typeof filename !== "string") {
@@ -60,11 +41,8 @@ export function extractSlug(filename: string): string {
 
 /**
  * Parse a single markdown file and return the term data
- * @param {string} filePath - Path to the markdown file
- * @param {string} filename - The filename
- * @returns {Promise<ParsedTerm|null>} The parsed term or null if invalid
  */
-export async function parseTermFile(filePath: string, filename: string): Promise<ParsedTerm | null> {
+export async function parseTermFile(filePath: string, filename: string): Promise<Term | null> {
   try {
     const content = await Deno.readTextFile(filePath);
     const term = parseMarkdown(content);
@@ -84,10 +62,8 @@ export async function parseTermFile(filePath: string, filename: string): Promise
 
 /**
  * Generate index data from markdown files in a directory
- * @param {string} dataDir - Directory containing markdown files
- * @returns {Promise<IndexData>} The generated index data
  */
-export async function generateIndex(dataDir: string): Promise<{ terms: Array<{ slug: string; title: string; abbrev?: string }>; generatedAt: string }> {
+export async function generateIndex(dataDir: string): Promise<CategoryIndex> {
   const terms = [];
   
   // Read directory
@@ -104,16 +80,12 @@ export async function generateIndex(dataDir: string): Promise<{ terms: Array<{ s
       continue;
     }
     
-    const termIndex: { slug: string; title: string; abbrev?: string } = {
+    const termIndex: TermIndex = {
       slug,
       title: term.title,
+      ...(term.abbrev && { abbrev: term.abbrev }),
     };
-    
-    // Only include abbrev if it has a value
-    if (term.abbrev) {
-      termIndex.abbrev = term.abbrev;
-    }
-    
+
     terms.push(termIndex);
   }
   
@@ -128,10 +100,8 @@ export async function generateIndex(dataDir: string): Promise<{ terms: Array<{ s
 
 /**
  * Read meta.json from a category directory
- * @param {string} categoryPath - Path to the category directory
- * @returns {Promise<{name: string, description?: string}|null>} The meta data or null if not found
  */
-export async function readCategoryMeta(categoryPath: string): Promise<{name: string, description?: string} | null> {
+export async function readCategoryMeta(categoryPath: string): Promise<CategoryMeta | null> {
   try {
     const metaPath = `${categoryPath}/meta.json`;
     const content = await Deno.readTextFile(metaPath);
@@ -153,10 +123,8 @@ export async function readCategoryMeta(categoryPath: string): Promise<{name: str
 
 /**
  * Aggregate approvers from terms, counting unique approvals per user
- * @param {ParsedTerm[]} terms - Array of parsed terms
- * @returns {ApproverInfo[]} Array of unique approvers with counts, sorted alphabetically by username
  */
-export function aggregateApprovers(terms: ParsedTerm[]): Array<{ username: string; approveCount: number }> {
+export function aggregateApprovers(terms: Term[]): ApproverInfo[] {
   const approverCounts = new Map<string, number>();
   
   for (const term of terms) {
@@ -181,10 +149,8 @@ export function aggregateApprovers(terms: ParsedTerm[]): Array<{ username: strin
 
 /**
  * Generate categories index from subdirectories
- * @param {string} dataDir - Root directory containing category subdirectories
- * @returns {Promise<CategoriesIndexData>} The generated categories index
  */
-export async function generateCategoriesIndex(dataDir: string): Promise<{ categories: Array<{ path: string; name: string; description?: string; termsCount: number; approvers: Array<{ username: string; approveCount: number }>; terms: Array<{ slug: string; title: string; abbrev?: string }> }>; generatedAt: string }> {
+export async function generateCategoriesIndex(dataDir: string): Promise<RootIndex> {
   const categories = [];
   
   // Read subdirectories
@@ -200,8 +166,8 @@ export async function generateCategoriesIndex(dataDir: string): Promise<{ catego
     const meta = await readCategoryMeta(categoryFullPath);
     
     // Collect all terms in this category
-    const terms: ParsedTerm[] = [];
-    const termIndex: Array<{ slug: string; title: string; abbrev?: string }> = [];
+    const terms: Term[] = [];
+    const termIndex: TermIndex[] = [];
     
     for await (const fileEntry of Deno.readDir(categoryFullPath)) {
       if (!fileEntry.isFile || !fileEntry.name.endsWith(".md")) {
@@ -214,13 +180,11 @@ export async function generateCategoriesIndex(dataDir: string): Promise<{ catego
       if (term) {
         terms.push(term);
         
-        const idx: { slug: string; title: string; abbrev?: string } = {
+        const idx: TermIndex = {
           slug: extractSlug(fileEntry.name),
           title: term.title,
+          ...(term.abbrev && { abbrev: term.abbrev }),
         };
-        if (term.abbrev) {
-          idx.abbrev = term.abbrev;
-        }
         termIndex.push(idx);
       }
     }
