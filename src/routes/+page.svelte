@@ -16,8 +16,7 @@
 	let searchPattern = $state<string>("");
 
 	function navigateToTerm(categoryPath: string, slug: string) {
-		const path = resolve("/[category]/[slug]", { category: categoryPath, slug });
-		goto(path);
+		goto(resolve("/[category]", { category: categoryPath }) + `?term=${slug}`);
 	}
 
 	function handleSearch(event: KeyboardEvent) {

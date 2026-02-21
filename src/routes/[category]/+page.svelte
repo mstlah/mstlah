@@ -8,7 +8,7 @@
 	import Loading from "$lib/components/Loading.svelte";
 	import { dev } from "$app/environment";
 
-	let { params }: PageProps = $props();
+	let { data }: PageProps = $props();
 
 	function extractUsername(approver: string) {
 		return approver.split(":").pop();
@@ -22,7 +22,7 @@
 		if (dev) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		return fetchTerm(params.category, params.slug);
+		return fetchTerm(data.category, data.slug);
 	})();
 </script>
 
