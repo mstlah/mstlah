@@ -17,7 +17,7 @@ const config = {
 			strict: true,
 		}),
 		prerender: {
-			entries: [`/`, `/[category]/[slug]`],
+			entries: [`/`, `/[category]`],
 		},
 		paths: {
 			base: process.argv.includes("dev") ? "" : base,
