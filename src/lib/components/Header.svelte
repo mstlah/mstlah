@@ -15,7 +15,6 @@
 		text-align: center;
 		margin: 0 auto;
 		margin-block: 5em 12em;
-		text-shadow: 0 0 5px var(--color-text);
 	}
 
 	.logo {

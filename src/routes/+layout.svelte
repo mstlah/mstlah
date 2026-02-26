@@ -1,8 +1,10 @@
 <script lang="ts">
 	import "$lib/assets/styles.css";
+	import ThemeToggle from "$lib/components/ThemeToggle.svelte";
 	const { children } = $props();
 </script>
 
+<ThemeToggle />
 <main class="main">
 	{@render children()}
 </main>
