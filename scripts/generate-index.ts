@@ -5,15 +5,15 @@
  * Generates index.json from markdown term files
  * 
  * Usage:
- *   deno run --allow-read --allow-write scripts/generate-index.ts [dataDir] [outputFile]
- *   deno run --allow-read --allow-write scripts/generate-index.ts --categories [dataDir] [outputFile]
- *   deno run --allow-read --allow-write scripts/generate-index.ts --full [dataDir]
+ *   deno run --allow-read --allow-write scripts/generate-index.ts [termsDir] [outputFile]
+ *   deno run --allow-read --allow-write scripts/generate-index.ts --categories [termsDir] [outputFile]
+ *   deno run --allow-read --allow-write scripts/generate-index.ts --full [termsDir]
  * 
  * Arguments:
  *   --categories - Generate top-level categories index instead of terms index
  *   --full       - Generate index.json in each category dir, then generate categories.json
- *   dataDir      - Directory containing .md term files or subdirectories (default: "./data")
- *   outputFile   - Output JSON file path (default: "./data/index.json" or "./data/categories.json")
+ *   termsDir     - Directory containing .md term files or subdirectories (default: "./dictionary/terms")
+ *   outputFile   - Output JSON file path (default: "./dictionary/api/v1/[category]/index.json" or "./dictionary/api/v1/categories.json")
  */
 
 import type { Term, TermIndex, CategoryIndex, RootIndex } from "../src/lib/types.ts";
@@ -241,23 +241,29 @@ export async function main(args: string[]): Promise<void> {
   const isFullMode = args.includes("--full");
   const filteredArgs = args.filter(arg => arg !== "--categories" && arg !== "--full");
   
-  const dataDir = filteredArgs[0] || "./data";
-  const outputFile = filteredArgs[1] || (isCategoriesMode ? `${dataDir}/categories.json` : `${dataDir}/index.json`);
+  const termsDir = filteredArgs[0] || "./dictionary/terms";
+  const apiDir = "./dictionary/api/v1";
+  const outputFile = filteredArgs[1] || (isCategoriesMode ? `${apiDir}/categories.json` : `${apiDir}/index.json`);
   
   if (isFullMode) {
-    console.log(`Running full generation for ${dataDir}...`);
+    console.log(`Running full generation for ${termsDir}...`);
     
     // First, generate index.json for each category directory
     const categoryDirs: string[] = [];
     
-    for await (const entry of Deno.readDir(dataDir)) {
+    for await (const entry of Deno.readDir(termsDir)) {
       if (!entry.isDirectory) {
         continue;
       }
       
       const categoryPath = entry.name;
-      const categoryFullPath = `${dataDir}/${categoryPath}`;
-      const indexOutputPath = `${categoryFullPath}/index.json`;
+      const categoryFullPath = `${termsDir}/${categoryPath}`;
+      const categoryApiPath = `${apiDir}/${categoryPath}`;
+      
+      // Ensure API directory exists
+      await Deno.mkdir(categoryApiPath, { recursive: true });
+      
+      const indexOutputPath = `${categoryApiPath}/index.json`;
       
       // Generate index for this category
       const indexData = await generateIndex(categoryFullPath);
@@ -271,18 +277,22 @@ export async function main(args: string[]): Promise<void> {
     
     // Then generate categories.json
     console.log(`\nGenerating categories index...`);
-    const categoriesData = await generateCategoriesIndex(dataDir);
+    const categoriesData = await generateCategoriesIndex(termsDir);
     
-    await writeIndex(categoriesData, `${dataDir}/categories.json`);
+    await writeIndex(categoriesData, `${apiDir}/categories.json`);
     
-    console.log(`\nCategories index written to ${dataDir}/categories.json`);
+    console.log(`\nCategories index written to ${apiDir}/categories.json`);
     console.log(`Generated at: ${categoriesData.generatedAt}`);
     console.log(`Total categories: ${categoriesData.categories.length}`);
     
   } else if (isCategoriesMode) {
-    console.log(`Generating categories index from ${dataDir}...`);
+    console.log(`Generating categories index from ${termsDir}...`);
     
-    const categoriesData = await generateCategoriesIndex(dataDir);
+    // Ensure output directory exists
+    const outputDir = outputFile.substring(0, outputFile.lastIndexOf("/"));
+    await Deno.mkdir(outputDir, { recursive: true });
+    
+    const categoriesData = await generateCategoriesIndex(termsDir);
     
     console.log(`Found ${categoriesData.categories.length} categories`);
     
@@ -291,9 +301,13 @@ export async function main(args: string[]): Promise<void> {
     console.log(`Categories index written to ${outputFile}`);
     console.log(`Generated at: ${categoriesData.generatedAt}`);
   } else {
-    console.log(`Generating index from ${dataDir}...`);
+    console.log(`Generating index from ${termsDir}...`);
     
-    const indexData = await generateIndex(dataDir);
+    // Ensure output directory exists
+    const outputDir = outputFile.substring(0, outputFile.lastIndexOf("/"));
+    await Deno.mkdir(outputDir, { recursive: true });
+    
+    const indexData = await generateIndex(termsDir);
     
     console.log(`Found ${indexData.terms.length} terms`);
     

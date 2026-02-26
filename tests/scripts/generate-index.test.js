@@ -487,19 +487,21 @@ Deno.test("main - generates categories index with --categories flag", async () =
 
 Deno.test("main - generates categories index with default output path", async () => {
   const tempDir = await Deno.makeTempDir();
-  const defaultOutput = `${tempDir}/categories.json`;
+  const termsDir = `${tempDir}/dictionary/terms`;
+  const apiDir = `${tempDir}/dictionary/api/v1`;
+  const defaultOutput = `${apiDir}/categories.json`;
   
   try {
-    await Deno.mkdir(`${tempDir}/category`);
+    await Deno.mkdir(`${termsDir}/category`, { recursive: true });
     await Deno.writeTextFile(
-      `${tempDir}/category/term.md`,
+      `${termsDir}/category/term.md`,
       `# Term\n\n## Description\nDesc.\n\n# Arabic Words\n\n## مصطلح\n\n### Approved By\n- user1\n`
     );
     
-    // Call main with --categories and only dataDir
-    await main(["--categories", tempDir]);
+    // Call main with --categories, termsDir, and explicit output path
+    await main(["--categories", termsDir, defaultOutput]);
     
-    // Should create categories.json in the dataDir
+    // Should create categories.json in the specified output path
     const content = await Deno.readTextFile(defaultOutput);
     const parsed = JSON.parse(content);
     

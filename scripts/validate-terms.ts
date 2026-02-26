@@ -328,13 +328,13 @@ Options:
   --help, -h       Show this help message
 
 Arguments:
-  paths            Files or directories to validate (default: ./data)
+  paths            Files or directories to validate (default: ./dictionary/terms)
 
 Examples:
   deno run --allow-read scripts/validate-terms.ts
-  deno run --allow-read scripts/validate-terms.ts ./data/tech
-  deno run --allow-read scripts/validate-terms.ts ./data/tech/api.md
-  deno run --allow-read --allow-write scripts/validate-terms.ts --verbose ./data
+  deno run --allow-read scripts/validate-terms.ts ./dictionary/terms/tech
+  deno run --allow-read scripts/validate-terms.ts ./dictionary/terms/tech/api.md
+  deno run --allow-read --allow-write scripts/validate-terms.ts --verbose ./dictionary/terms
 `);
 			return 0;
 		} else if (!args[i].startsWith("-")) {
@@ -343,7 +343,7 @@ Examples:
 	}
 
 	if (paths.length === 0) {
-		paths = ["./data"];
+		paths = ["./dictionary/terms"];
 	}
 
 	const allResults: ValidationResult[] = [];
