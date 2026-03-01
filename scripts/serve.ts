@@ -18,9 +18,9 @@ Deno.serve({ port: PORT }, async (request) => {
     showIndex: true,
     showDotfiles: false,
   });
-  
+
   // Add CORS headers for local development
   response.headers.set("Access-Control-Allow-Origin", "*");
-  
+
   return response;
 });

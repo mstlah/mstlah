@@ -2,83 +2,79 @@
   --color-bg: #191919;
   --color-bg-alt: #282828;
 
-	--color-fg: #ebdbb2;
+  --color-fg: #ebdbb2;
   --color-fg-dim: #a89984;
 
-	--color-1: #D05353;
-	--color-2: #E58F65;
-	--color-3: #F9E784;
-	--color-4: #F1E8B8;
+  --color-1: #d05353;
+  --color-2: #e58f65;
+  --color-3: #f9e784;
+  --color-4: #f1e8b8;
 
-	--color-primary: #D05353;
-	--color-primary-hover: var(--color-primary);
-	--color-accent: #E58F65;
-	--color-accent-bg: var(--color-accent);
-	--color-accent-bg-hover: var(--color-accent);
+  --color-primary: #d05353;
+  --color-primary-hover: var(--color-primary);
+  --color-accent: #e58f65;
+  --color-accent-bg: var(--color-accent);
+  --color-accent-bg-hover: var(--color-accent);
 
+  --color-approver: var(--color-primary);
+  --color-approver-text: var(--color-fg);
 
-	--color-approver: var(--color-primary);
-	--color-approver-text: var(--color-fg);
+  --color-tag: var(--color-accent);
+  --color-tag-text: var(--color-bg);
 
-	--color-tag: var(--color-accent);
-	--color-tag-text: var(--color-bg);
-
-
-	--color-suggestion-bg: var(--color-accent);
-	--color-suggestion-text: var(--color-bg);
+  --color-suggestion-bg: var(--color-accent);
+  --color-suggestion-text: var(--color-bg);
 
   --color-card: var(--color-bg-alt);
 
   --color-text: var(--color-fg);
   --color-text-secondary: var(--color-fg-dim);
   --color-text-muted: #665c54;
-	--color-border: #3c3836;
+  --color-border: #3c3836;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
   --radius-sm: 2px;
   --radius-md: 2px;
   --radius-lg: 2px;
-  --font-arabic: 'Almarai', 'Segoe UI', 'Arial', 'Tahoma', sans-serif;
-  --font-display: 'Aref Ruqaa', serif;
-  --font-english: 'Electrolize', system-ui, -apple-system, sans-serif;
+  --font-arabic: "Almarai", "Segoe UI", "Arial", "Tahoma", sans-serif;
+  --font-display: "Aref Ruqaa", serif;
+  --font-english: "Electrolize", system-ui, -apple-system, sans-serif;
 }
 
 :root.light {
   --color-bg: #f5f5f0;
   --color-bg-alt: #e8e4db;
 
-	--color-fg: #2d2a24;
+  --color-fg: #2d2a24;
   --color-fg-dim: #6b6560;
 
-	--color-1: #c44b4b;
-	--color-2: #d67d55;
-	--color-3: #c4a935;
-	--color-4: #a89a52;
+  --color-1: #c44b4b;
+  --color-2: #d67d55;
+  --color-3: #c4a935;
+  --color-4: #a89a52;
 
-	--color-primary: #c44b4b;
-	--color-primary-hover: #b03e3e;
-	--color-accent: #d67d55;
-	--color-accent-bg: #e8e0d8;
-	--color-accent-bg-hover: #d67d55;
+  --color-primary: #c44b4b;
+  --color-primary-hover: #b03e3e;
+  --color-accent: #d67d55;
+  --color-accent-bg: #e8e0d8;
+  --color-accent-bg-hover: #d67d55;
 
+  --color-approver: var(--color-primary);
+  --color-approver-text: var(--color-bg);
 
-	--color-approver: var(--color-primary);
-	--color-approver-text: var(--color-bg);
+  --color-tag: #d67d55;
+  --color-tag-text: var(--color-bg);
 
-	--color-tag: #d67d55;
-	--color-tag-text: var(--color-bg);
-
-
-	--color-suggestion-bg: #e8e0d8;
-	--color-suggestion-text: var(--color-fg);
+  --color-suggestion-bg: #e8e0d8;
+  --color-suggestion-text: var(--color-fg);
 
   --color-card: var(--color-bg-alt);
 
   --color-text: var(--color-fg);
   --color-text-secondary: var(--color-fg-dim);
   --color-text-muted: #9c9590;
-	--color-border: #d4cfc4;
+  --color-border: #d4cfc4;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
@@ -106,20 +102,20 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
-	width: 100vw;
-	direction: rtl;
+  width: 100vw;
+  direction: rtl;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
-	color: unset;
-	text-decoration: none;
+  color: unset;
+  text-decoration: none;
 }
 
 .search-wrapper {
@@ -128,8 +124,6 @@ a {
 
 @media (max-width: 600px) {
   :root {
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
-  
- 
 }

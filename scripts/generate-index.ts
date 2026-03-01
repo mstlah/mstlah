@@ -3,12 +3,12 @@
 /**
  * Index Generator Script
  * Generates index.json from markdown term files
- * 
+ *
  * Usage:
  *   deno run --allow-read --allow-write scripts/generate-index.ts [termsDir] [outputFile]
  *   deno run --allow-read --allow-write scripts/generate-index.ts --categories [termsDir] [outputFile]
  *   deno run --allow-read --allow-write scripts/generate-index.ts --full [termsDir]
- * 
+ *
  * Arguments:
  *   --categories - Generate top-level categories index instead of terms index
  *   --full       - Generate index.json in each category dir, then generate categories.json
@@ -16,17 +16,22 @@
  *   outputFile   - Output JSON file path (default: "./dictionary/api/v1/[category]/index.json" or "./dictionary/api/v1/categories.json")
  */
 
-import type { Term, TermIndex, CategoryIndex, RootIndex } from "../src/lib/types.ts";
-import { parseMarkdown, isValidTerm } from "../src/lib/md-parser.ts";
+import type {
+  CategoryIndex,
+  RootIndex,
+  Term,
+  TermIndex,
+} from "../src/lib/types.ts";
+import { isValidTerm, parseMarkdown } from "../src/lib/md-parser.ts";
 
 interface ApproverInfo {
-	username: string;
-	approveCount: number;
+  username: string;
+  approveCount: number;
 }
 
 interface CategoryMeta {
-	name: string;
-	description?: string;
+  name: string;
+  description?: string;
 }
 
 /**
@@ -42,19 +47,26 @@ export function extractSlug(filename: string): string {
 /**
  * Parse a single markdown file and return the term data
  */
-export async function parseTermFile(filePath: string, filename: string): Promise<Term | null> {
+export async function parseTermFile(
+  filePath: string,
+  filename: string,
+): Promise<Term | null> {
   try {
     const content = await Deno.readTextFile(filePath);
     const term = parseMarkdown(content);
-    
+
     if (!isValidTerm(term)) {
-      console.error(`Skipping invalid file ${filename}: missing required fields`);
+      console.error(
+        `Skipping invalid file ${filename}: missing required fields`,
+      );
       return null;
     }
-    
+
     return term;
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage = error instanceof Error
+      ? error.message
+      : "Unknown error";
     console.error(`Error parsing ${filename}: ${errorMessage}`);
     return null;
   }
@@ -65,21 +77,21 @@ export async function parseTermFile(filePath: string, filename: string): Promise
  */
 export async function generateIndex(dataDir: string): Promise<CategoryIndex> {
   const terms = [];
-  
+
   // Read directory
   for await (const entry of Deno.readDir(dataDir)) {
     if (!entry.isFile || !entry.name.endsWith(".md")) {
       continue;
     }
-    
+
     const slug = extractSlug(entry.name);
     const filePath = `${dataDir}/${entry.name}`;
-    
+
     const term = await parseTermFile(filePath, entry.name);
     if (!term) {
       continue;
     }
-    
+
     const termIndex: TermIndex = {
       slug,
       title: term.title,
@@ -88,10 +100,10 @@ export async function generateIndex(dataDir: string): Promise<CategoryIndex> {
 
     terms.push(termIndex);
   }
-  
+
   // Sort terms alphabetically by title
   terms.sort((a, b) => a.title.localeCompare(b.title));
-  
+
   return {
     terms,
     generatedAt: new Date().toISOString(),
@@ -101,17 +113,21 @@ export async function generateIndex(dataDir: string): Promise<CategoryIndex> {
 /**
  * Read meta.json from a category directory
  */
-export async function readCategoryMeta(categoryPath: string): Promise<CategoryMeta | null> {
+export async function readCategoryMeta(
+  categoryPath: string,
+): Promise<CategoryMeta | null> {
   try {
     const metaPath = `${categoryPath}/meta.json`;
     const content = await Deno.readTextFile(metaPath);
     const meta = JSON.parse(content);
-    
+
     if (!meta.name) {
-      console.warn(`Warning: meta.json in ${categoryPath} is missing "name" field`);
+      console.warn(
+        `Warning: meta.json in ${categoryPath} is missing "name" field`,
+      );
       return null;
     }
-    
+
     return {
       name: meta.name,
       description: meta.description || undefined,
@@ -126,60 +142,62 @@ export async function readCategoryMeta(categoryPath: string): Promise<CategoryMe
  */
 export function aggregateApprovers(terms: Term[]): ApproverInfo[] {
   const approverCounts = new Map<string, number>();
-  
+
   for (const term of terms) {
     if (!term.arabicWords) continue;
-    
+
     for (const arabicWord of term.arabicWords) {
       if (!arabicWord.approvedBy) continue;
-      
+
       for (const username of arabicWord.approvedBy) {
         approverCounts.set(username, (approverCounts.get(username) || 0) + 1);
       }
     }
   }
-  
+
   // Convert to array and sort alphabetically by username
   const approvers = Array.from(approverCounts.entries())
     .map(([username, approveCount]) => ({ username, approveCount }))
     .sort((a, b) => a.username.localeCompare(b.username));
-  
+
   return approvers;
 }
 
 /**
  * Generate categories index from subdirectories
  */
-export async function generateCategoriesIndex(dataDir: string): Promise<RootIndex> {
+export async function generateCategoriesIndex(
+  dataDir: string,
+): Promise<RootIndex> {
   const categories = [];
-  
+
   // Read subdirectories
   for await (const entry of Deno.readDir(dataDir)) {
     if (!entry.isDirectory) {
       continue;
     }
-    
+
     const categoryPath = entry.name;
     const categoryFullPath = `${dataDir}/${categoryPath}`;
-    
+
     // Read meta.json if exists
     const meta = await readCategoryMeta(categoryFullPath);
-    
+
     // Collect all terms in this category
     const terms: Term[] = [];
     const termIndex: TermIndex[] = [];
-    
+
     for await (const fileEntry of Deno.readDir(categoryFullPath)) {
       if (!fileEntry.isFile || !fileEntry.name.endsWith(".md")) {
         continue;
       }
-      
+
       const filePath = `${categoryFullPath}/${fileEntry.name}`;
       const term = await parseTermFile(filePath, fileEntry.name);
-      
+
       if (term) {
         terms.push(term);
-        
+
         const idx: TermIndex = {
           slug: extractSlug(fileEntry.name),
           title: term.title,
@@ -188,14 +206,14 @@ export async function generateCategoriesIndex(dataDir: string): Promise<RootInde
         termIndex.push(idx);
       }
     }
-    
+
     // Only add category if it has terms
     if (terms.length > 0) {
       const approvers = aggregateApprovers(terms);
-      
+
       // Sort term index alphabetically by title
       termIndex.sort((a, b) => a.title.localeCompare(b.title));
-      
+
       categories.push({
         path: categoryPath,
         name: meta?.name || categoryPath,
@@ -206,10 +224,10 @@ export async function generateCategoriesIndex(dataDir: string): Promise<RootInde
       });
     }
   }
-  
+
   // Sort categories alphabetically by Arabic name
   categories.sort((a, b) => a.name.localeCompare(b.name, "ar"));
-  
+
   return {
     categories,
     generatedAt: new Date().toISOString(),
@@ -224,7 +242,7 @@ export async function generateCategoriesIndex(dataDir: string): Promise<RootInde
  */
 export async function writeIndex(
   indexData: object,
-  outputPath: string
+  outputPath: string,
 ): Promise<void> {
   const json = JSON.stringify(indexData, null, 2);
   await Deno.writeTextFile(outputPath, json + "\n");
@@ -239,38 +257,41 @@ export async function main(args: string[]): Promise<void> {
   // Check for flags
   const isCategoriesMode = args.includes("--categories");
   const isFullMode = args.includes("--full");
-  const filteredArgs = args.filter(arg => arg !== "--categories" && arg !== "--full");
-  
+  const filteredArgs = args.filter((arg) =>
+    arg !== "--categories" && arg !== "--full"
+  );
+
   const termsDir = filteredArgs[0] || "./dictionary/terms";
   const apiDir = "./dictionary/api/v1";
-  const outputFile = filteredArgs[1] || (isCategoriesMode ? `${apiDir}/categories.json` : `${apiDir}/index.json`);
-  
+  const outputFile = filteredArgs[1] ||
+    (isCategoriesMode ? `${apiDir}/categories.json` : `${apiDir}/index.json`);
+
   if (isFullMode) {
     console.log(`Running full generation for ${termsDir}...`);
-    
+
     // First, generate index.json for each category directory
     const categoryDirs: string[] = [];
-    
+
     for await (const entry of Deno.readDir(termsDir)) {
       if (!entry.isDirectory) {
         continue;
       }
-      
+
       const categoryPath = entry.name;
       const categoryFullPath = `${termsDir}/${categoryPath}`;
       const categoryApiPath = `${apiDir}/${categoryPath}`;
-      
+
       // Ensure API directory exists
       await Deno.mkdir(categoryApiPath, { recursive: true });
-      
+
       const indexOutputPath = `${categoryApiPath}/index.json`;
-      
+
       // Generate index for this category
       const indexData = await generateIndex(categoryFullPath);
-      
+
       if (indexData.terms.length > 0) {
         await writeIndex(indexData, indexOutputPath);
-        
+
         // Copy meta.json if it exists
         const metaSourcePath = `${categoryFullPath}/meta.json`;
         const metaDestPath = `${categoryApiPath}/meta.json`;
@@ -280,50 +301,51 @@ export async function main(args: string[]): Promise<void> {
         } catch {
           // No meta.json in source, skip
         }
-        
-        console.log(`Generated ${indexOutputPath} with ${indexData.terms.length} terms`);
+
+        console.log(
+          `Generated ${indexOutputPath} with ${indexData.terms.length} terms`,
+        );
         categoryDirs.push(categoryPath);
       }
     }
-    
+
     // Then generate categories.json
     console.log(`\nGenerating categories index...`);
     const categoriesData = await generateCategoriesIndex(termsDir);
-    
+
     await writeIndex(categoriesData, `${apiDir}/categories.json`);
-    
+
     console.log(`\nCategories index written to ${apiDir}/categories.json`);
     console.log(`Generated at: ${categoriesData.generatedAt}`);
     console.log(`Total categories: ${categoriesData.categories.length}`);
-    
   } else if (isCategoriesMode) {
     console.log(`Generating categories index from ${termsDir}...`);
-    
+
     // Ensure output directory exists
     const outputDir = outputFile.substring(0, outputFile.lastIndexOf("/"));
     await Deno.mkdir(outputDir, { recursive: true });
-    
+
     const categoriesData = await generateCategoriesIndex(termsDir);
-    
+
     console.log(`Found ${categoriesData.categories.length} categories`);
-    
+
     await writeIndex(categoriesData, outputFile);
-    
+
     console.log(`Categories index written to ${outputFile}`);
     console.log(`Generated at: ${categoriesData.generatedAt}`);
   } else {
     console.log(`Generating index from ${termsDir}...`);
-    
+
     // Ensure output directory exists
     const outputDir = outputFile.substring(0, outputFile.lastIndexOf("/"));
     await Deno.mkdir(outputDir, { recursive: true });
-    
+
     const indexData = await generateIndex(termsDir);
-    
+
     console.log(`Found ${indexData.terms.length} terms`);
-    
+
     await writeIndex(indexData, outputFile);
-    
+
     console.log(`Index written to ${outputFile}`);
     console.log(`Generated at: ${indexData.generatedAt}`);
   }
