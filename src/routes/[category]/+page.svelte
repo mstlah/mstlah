@@ -1,14 +1,18 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { fetchTerm } from "$repo";
+	import { fetchCategoryMeta, fetchTerm } from "$repo";
 	import Header from "$lib/components/Header.svelte";
-	import { type ArabicWord } from "$lib/types";
+	import type { ArabicWord, Term } from "$lib/types";
 	import type { PageProps } from "./$types";
 	import { resolve } from "$app/paths";
 	import Loading from "$lib/components/Loading.svelte";
 	import { dev } from "$app/environment";
 
 	let { data }: PageProps = $props();
+
+	interface TermWithCategory extends Term {
+		category: string;
+	}
 
 	function extractUsername(approver: string) {
 		return approver.split(":").pop();
@@ -18,11 +22,16 @@
 		return approver.split(":").shift();
 	}
 
-	const fetchTermFuture = (async () => {
+	const fetchTermFuture = (async (): Promise<TermWithCategory> => {
 		if (dev) {
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		return fetchTerm(data.category, data.slug);
+		const term = await fetchTerm(data.category, data.slug);
+		const meta = await fetchCategoryMeta(data.category);
+		return {
+			category: meta.name ?? data.category,
+			...term,
+		};
 	})();
 </script>
 
@@ -46,7 +55,10 @@
 		<div class="approvers">
 			{#each term.approvedBy as approver}
 				<div class="approver">
-					<a target="_blank" href="https://github.com/{extractUsername(approver)}">
+					<a
+						target="_blank"
+						href="https://github.com/{extractUsername(approver)}"
+					>
 						{extractName(approver)}
 					</a>
 				</div>
@@ -84,8 +96,11 @@
 
 		<div class="container">
 			<div class="title">
-				<div class="full">{term.title}</div>
-				<div class="short">{term.abbrev}</div>
+				<div class="category">{term.category}</div>
+				<div class="term-en">
+					<div class="full">{term.title}</div>
+					<div class="short">{term.abbrev}</div>
+				</div>
 			</div>
 			<div class="content">
 				<div class="tags">
@@ -133,8 +148,23 @@
 	.container .title {
 		direction: ltr;
 		display: flex;
-		align-items: baseline;
+		flex-direction: column;
 		font-family: var(--font-english);
+
+		& .category {
+			font-size: 0.8rem;
+			opacity: 0.8;
+			padding: 0 0.8rem;
+			background: var(--color-3);
+			width: fit-content;
+			color: var(--color-tag-text);
+			align-self: flex-end;
+		}
+
+		& .term-en {
+			display: flex;
+			align-items: baseline;
+		}
 
 		& .full {
 			font-size: 2.5rem;

@@ -3,7 +3,6 @@ import type { CategoryIndex, RootIndex, Term } from "../types.ts";
 const API_PATH = "/dictionary/api/v1";
 const TERMS_PATH = "/dictionary/terms";
 
-
 export async function fetchRootIndex(): Promise<RootIndex> {
 	const response = await fetch(`${API_PATH}/categories.json`);
 	if (!response.ok) {
@@ -29,10 +28,7 @@ export async function fetchCategoryIndex(
 	return { terms, generatedAt };
 }
 
-export async function fetchTerm(
-	category: string,
-	term: string,
-): Promise<Term> {
+export async function fetchTerm(category: string, term: string): Promise<Term> {
 	const response = await fetch(`${TERMS_PATH}/${category}/${term}.md`);
 	if (!response.ok) {
 		throw new Error(
@@ -42,4 +38,22 @@ export async function fetchTerm(
 	const content = await response.text();
 	const { parseMarkdown } = await import("../md-parser.ts");
 	return parseMarkdown(content);
+}
+
+export async function fetchCategoryMeta(
+	category: string,
+): Promise<CategoryMeta> {
+	try {
+		const response = await fetch(`${API_PATH}/${category}/meta.json`);
+		if (!response.ok) {
+			throw new Error(
+				`Failed to fetch category meta: ${response.status} ${response.statusText}`,
+			);
+		}
+		return response.json();
+	} catch (error: unknown) {
+		return {
+			name: category,
+		}
+	}
 }

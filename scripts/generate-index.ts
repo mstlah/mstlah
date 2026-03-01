@@ -270,6 +270,17 @@ export async function main(args: string[]): Promise<void> {
       
       if (indexData.terms.length > 0) {
         await writeIndex(indexData, indexOutputPath);
+        
+        // Copy meta.json if it exists
+        const metaSourcePath = `${categoryFullPath}/meta.json`;
+        const metaDestPath = `${categoryApiPath}/meta.json`;
+        try {
+          await Deno.copyFile(metaSourcePath, metaDestPath);
+          console.log(`Copied meta.json to ${metaDestPath}`);
+        } catch {
+          // No meta.json in source, skip
+        }
+        
         console.log(`Generated ${indexOutputPath} with ${indexData.terms.length} terms`);
         categoryDirs.push(categoryPath);
       }
