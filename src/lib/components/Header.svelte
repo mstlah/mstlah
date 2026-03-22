@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from "$app/paths";
+
 	const { size, pos } = $props();
 	const align = pos === "right" ? "right" : "center";
 	const margin = size === "small" ? "5em 8em" : "5em 15em";
@@ -6,7 +8,7 @@
 </script>
 
 <header class="header" style:text-align={align} style:margin-block={margin}>
-	<h1 class="logo" style:font-size={fontSize}>مصطلح</h1>
+	<a href={resolve("/")} class="logo" style:font-size={fontSize}>مصطلع</a>
 </header>
 
 <style>
