@@ -13,14 +13,14 @@
 			return;
 		}
 
-		goto(resolve("/"));
+		goto(resolve("/articles"));
 	}}
 />
 
 <Header size="small" pos="right" />
 
 <div class="article-page">
-	<a href={resolve("/")} class="back" id="backBtn">
+	<a href={resolve("/articles")} class="back" id="backBtn">
 		<svg
 			width="16"
 			height="16"
