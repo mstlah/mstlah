@@ -1,4 +1,6 @@
-import type { CategoryIndex, RootIndex, Term } from "../types.ts";
+import type { ArticlesIndex, CategoryIndex, RootIndex, Term } from "../types.ts";
+
+console.log("Using github repos");
 
 // TODO: Move to config file
 const OWNER = "mstlah";
@@ -6,11 +8,14 @@ const REPO = "mstlah";
 const BRANCH = "dummy";
 const API_PATH = "dictionary/api/v1";
 const TERMS_PATH = "dictionary/terms";
+const ARTICLES_PATH = "articles";
 
 const API_BASE_URL =
   `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${API_PATH}`;
 const TERMS_BASE_URL =
   `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${TERMS_PATH}`;
+const ARTICLES_BASE_URL =
+  `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${ARTICLES_PATH}`;
 
 export async function fetchRootIndex(): Promise<RootIndex> {
   const response = await fetch(`${API_BASE_URL}/categories.json`);
@@ -65,4 +70,29 @@ export async function fetchCategoryMeta(
       name: category,
     };
   }
+}
+
+export async function fetchArticle(
+  category: string,
+  article: string,
+): Promise<string> {
+  const response = await fetch(
+    `${ARTICLES_BASE_URL}/${category}/${article}.md`,
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch article "${article}": ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.text();
+}
+
+export async function fetchArticlesIndex(): Promise<ArticlesIndex> {
+  const response = await fetch(`${ARTICLES_BASE_URL}/index.json`);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch articles index: ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.json();
 }

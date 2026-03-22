@@ -36,3 +36,17 @@ export interface Term {
   tags: string[];
   arabicWords: ArabicWord[];
 }
+
+export interface Article {
+  id: string;
+  category: string;
+  title: string;
+}
+
+export interface ArticlesIndex {
+  categories: {
+    path: string;
+    articles: Article[];
+  }[];
+  generatedAt: string;
+}

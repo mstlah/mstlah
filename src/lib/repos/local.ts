@@ -1,7 +1,10 @@
-import type { CategoryIndex, RootIndex, Term } from "../types.ts";
+import type { ArticlesIndex, CategoryIndex, RootIndex, Term } from "../types.ts";
+
+console.log("Using local repos");
 
 const API_PATH = "/dictionary/api/v1";
 const TERMS_PATH = "/dictionary/terms";
+const ARTICLES_PATH = "/articles";
 
 export async function fetchRootIndex(): Promise<RootIndex> {
   const response = await fetch(`${API_PATH}/categories.json`);
@@ -56,4 +59,27 @@ export async function fetchCategoryMeta(
       name: category,
     };
   }
+}
+
+export async function fetchArticle(
+  category: string,
+  article: string,
+): Promise<string> {
+  const response = await fetch(`${ARTICLES_PATH}/${category}/${article}.md`);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch article "${article}": ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.text();
+}
+
+export async function fetchArticlesIndex(): Promise<ArticlesIndex> {
+  const response = await fetch(`${ARTICLES_PATH}/index.json`);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch articles index: ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.json();
 }

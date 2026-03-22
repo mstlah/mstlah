@@ -11,7 +11,9 @@ import {
   main,
   parseTermFile,
   aggregateApprovers,
-  generateCategoriesIndex
+  generateCategoriesIndex,
+  extractArticleTitle,
+  generateArticlesIndex
 } from "../../scripts/generate-index.ts";
 
 // Test extractSlug
@@ -506,6 +508,103 @@ Deno.test("main - generates categories index with default output path", async ()
     const parsed = JSON.parse(content);
     
     assertEquals(parsed.categories.length, 1);
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
+});
+
+// Test extractArticleTitle
+Deno.test("extractArticleTitle - extracts title from first # header", () => {
+  assertEquals(extractArticleTitle("# My Title\n\nSome content"), "My Title");
+  assertEquals(extractArticleTitle("# Article Title\n\n## Section\n\nText"), "Article Title");
+});
+
+Deno.test("extractArticleTitle - returns null if no # header found", () => {
+  assertEquals(extractArticleTitle("No header here"), null);
+  assertEquals(extractArticleTitle("## This is h2\n\nText"), null);
+});
+
+// Test generateArticlesIndex
+Deno.test("generateArticlesIndex - groups articles by category and sorts", async () => {
+  const tempDir = await Deno.makeTempDir();
+
+  try {
+    await Deno.mkdir(`${tempDir}/programming`);
+    await Deno.mkdir(`${tempDir}/ai`);
+
+    await Deno.writeTextFile(`${tempDir}/programming/1.md`, "# Getting Started\n\nContent");
+    await Deno.writeTextFile(`${tempDir}/programming/2.md`, "# Advanced Topics\n\nContent");
+    await Deno.writeTextFile(`${tempDir}/ai/1.md`, "# AI Basics\n\nContent");
+    await Deno.writeTextFile(`${tempDir}/ai/10.md`, "# Deep Learning\n\nContent");
+
+    const index = await generateArticlesIndex(tempDir);
+
+    assertEquals(index.categories.length, 2);
+    assertEquals(index.categories[0].path, "ai");
+    assertEquals(index.categories[1].path, "programming");
+
+    assertEquals(index.categories[0].articles.length, 2);
+    assertEquals(index.categories[0].articles[0].id, "1");
+    assertEquals(index.categories[0].articles[0].title, "AI Basics");
+    assertEquals(index.categories[0].articles[1].id, "10");
+    assertEquals(index.categories[0].articles[1].title, "Deep Learning");
+
+    assertEquals(index.categories[1].articles.length, 2);
+    assertEquals(index.categories[1].articles[0].id, "1");
+    assertEquals(index.categories[1].articles[1].id, "2");
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
+});
+
+Deno.test("generateArticlesIndex - handles empty directory", async () => {
+  const tempDir = await Deno.makeTempDir();
+
+  try {
+    const index = await generateArticlesIndex(tempDir);
+    assertEquals(index.categories.length, 0);
+    assertExists(index.generatedAt);
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
+});
+
+Deno.test("generateArticlesIndex - skips files without title", async () => {
+  const tempDir = await Deno.makeTempDir();
+
+  try {
+    await Deno.mkdir(`${tempDir}/tech`);
+    await Deno.writeTextFile(`${tempDir}/tech/1.md`, "No header here\n\n## Section");
+    await Deno.writeTextFile(`${tempDir}/tech/2.md`, "# Valid Article\n\nContent");
+
+    const index = await generateArticlesIndex(tempDir);
+
+    assertEquals(index.categories.length, 1);
+    assertEquals(index.categories[0].articles.length, 1);
+    assertEquals(index.categories[0].articles[0].title, "Valid Article");
+  } finally {
+    await Deno.remove(tempDir, { recursive: true });
+  }
+});
+
+Deno.test("main - generates articles index with --articles flag", async () => {
+  const tempDir = await Deno.makeTempDir();
+  const outputFile = `${tempDir}/index.json`;
+
+  try {
+    await Deno.mkdir(`${tempDir}/category`);
+    await Deno.writeTextFile(`${tempDir}/category/1.md`, "# First Article\n\nContent");
+    await Deno.writeTextFile(`${tempDir}/category/2.md`, "# Second Article\n\nContent");
+
+    await main(["--articles", tempDir, outputFile]);
+
+    const content = await Deno.readTextFile(outputFile);
+    const parsed = JSON.parse(content);
+
+    assertEquals(parsed.categories.length, 1);
+    assertEquals(parsed.categories[0].path, "category");
+    assertEquals(parsed.categories[0].articles.length, 2);
+    assertExists(parsed.generatedAt);
   } finally {
     await Deno.remove(tempDir, { recursive: true });
   }
