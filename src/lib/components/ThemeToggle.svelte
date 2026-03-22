@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { resolve } from "$app/paths";
 
 	let isDark = $state(true);
 
@@ -29,7 +30,7 @@
 </script>
 
 <div class="controls">
-	<a href="/articles" class="articles-link">مقالات</a>
+	<a href={resolve("/articles")} class="articles-link">مقالات</a>
 	<button class="theme-toggle" onclick={toggle} aria-label={isDark ? "تبديل للوضع الفاتح" : "تبديل للوضع الداكن"}>
 		{#if isDark}
 			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
