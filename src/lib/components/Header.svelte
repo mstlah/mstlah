@@ -14,7 +14,7 @@
 >
 	<div class="logo-wrap" style:font-size={fontSize}>
 		<a href={resolve("/")} class="logo">
-			مصطلع
+			مصطلح
 		</a>
 		<span class="proto-chip">نموذج</span>
 	</div>
